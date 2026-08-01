@@ -21,7 +21,7 @@ struct ConfigurationManagerTests {
 
         // Then
         #expect(manager.isConfigured == false)
-        #expect(manager.baseURL == "https://api.votice.app/api")
+        #expect(manager.baseURL == "https://api-svdrkzyfhq-uc.a.run.app/api")
         #expect(manager.apiKey.isEmpty)
         #expect(manager.apiSecret.isEmpty)
         #expect(manager.appId.isEmpty)
@@ -32,7 +32,7 @@ struct ConfigurationManagerTests {
         #expect(manager.showCompletedSeparately == false)
         #expect(manager.user.isPremium == false)
         #expect(manager.optionalVisibleStatuses == [.accepted, .blocked, .rejected])
-        #expect(manager.version == "1.0.20")
+        #expect(manager.version == "1.0.21")
         #expect(manager.buildNumber == "1")
     }
 
@@ -129,7 +129,7 @@ struct ConfigurationManagerTests {
         #expect(manager.apiKey.isEmpty)
         #expect(manager.apiSecret.isEmpty)
         #expect(manager.appId.isEmpty)
-        #expect(manager.baseURL == "https://api.votice.app/api") // baseURL should remain
+        #expect(manager.baseURL == "https://api-svdrkzyfhq-uc.a.run.app/api") // baseURL should remain
 
         // Settings should be reset to defaults
         #expect(manager.commentIsEnabled == true)
@@ -138,7 +138,7 @@ struct ConfigurationManagerTests {
 
         // ConfigurationId, version, and buildNumber should remain unchanged
         #expect(!manager.configurationId.isEmpty)
-        #expect(manager.version == "1.0.20")
+        #expect(manager.version == "1.0.21")
         #expect(manager.buildNumber == "1")
     }
 
@@ -324,8 +324,8 @@ struct ConfigurationManagerTests {
         let manager = ConfigurationManager()
 
         // Test immutable properties
-        #expect(manager.baseURL == "https://api.votice.app/api")
-        #expect(manager.version == "1.0.20")
+        #expect(manager.baseURL == "https://api-svdrkzyfhq-uc.a.run.app/api")
+        #expect(manager.version == "1.0.21")
         #expect(manager.buildNumber == "1")
 
         // Configuration ID should be consistent for same instance
