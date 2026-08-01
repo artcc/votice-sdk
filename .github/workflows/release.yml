@@ -24,77 +24,71 @@ jobs:
       run: |
         git fetch --force --tags --prune
 
-    - name: Get latest tag and commit message
+    - name: Get SDK version and release notes
       id: get_tag
       run: |
-        # Get the latest tag
-        LATEST_TAG=$(git tag --sort=-version:refname | head -n1)
-        echo "Latest tag found: $LATEST_TAG"
-        echo "latest_tag=$LATEST_TAG" >> $GITHUB_OUTPUT
+        set -euo pipefail
 
-        # Calculate new tag
-        if [[ $LATEST_TAG =~ ^([0-9]+)\.([0-9]+)\.([0-9]+)$ ]]; then
-          MAJOR=${BASH_REMATCH[1]}
-          MINOR=${BASH_REMATCH[2]}
-          PATCH=${BASH_REMATCH[3]}
-          NEW_PATCH=$((PATCH + 1))
-          NEW_TAG="$MAJOR.$MINOR.$NEW_PATCH"
-          echo "Incrementing patch version: $LATEST_TAG -> $NEW_TAG"
-        elif [[ -z "$LATEST_TAG" ]]; then
-          NEW_TAG="1.0.0"
-          echo "No previous tags found, starting with: $NEW_TAG"
-        else
-          echo "Invalid tag format: $LATEST_TAG"
-          echo "Expected format: X.Y.Z (semantic versioning)"
+        SDK_VERSION=$(sed -nE 's/^[[:space:]]*private let _version = "([^"]+)"[[:space:]]*$/\1/p' Sources/Votice/Core/Managers/ConfigurationManager.swift)
+        if [[ ! "$SDK_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+          echo "Invalid or missing SDK version: '$SDK_VERSION'"
+          echo "Expected _version to use semantic versioning (X.Y.Z)"
           exit 1
         fi
 
-        echo "new_tag=$NEW_TAG" >> $GITHUB_OUTPUT
-        echo "New tag will be: $NEW_TAG"
+        echo "sdk_version=$SDK_VERSION" >> "$GITHUB_OUTPUT"
+        echo "SDK version found: $SDK_VERSION"
+
+        if git rev-parse "refs/tags/$SDK_VERSION" >/dev/null 2>&1; then
+          echo "Tag $SDK_VERSION already exists; there is nothing to release."
+          echo "should_release=false" >> "$GITHUB_OUTPUT"
+          exit 0
+        fi
+        echo "should_release=true" >> "$GITHUB_OUTPUT"
+
+        LATEST_TAG=$(git tag --sort=-version:refname | head -n1)
+        echo "Latest tag found: $LATEST_TAG"
+        echo "latest_tag=$LATEST_TAG" >> "$GITHUB_OUTPUT"
 
         # Get the latest commit message and changelog
         COMMIT_MESSAGE=$(git log -1 --pretty=%B)
-        echo "commit_message<<EOF" >> $GITHUB_OUTPUT
-        echo "$COMMIT_MESSAGE" >> $GITHUB_OUTPUT
-        echo "EOF" >> $GITHUB_OUTPUT
+        echo "commit_message<<EOF" >> "$GITHUB_OUTPUT"
+        echo "$COMMIT_MESSAGE" >> "$GITHUB_OUTPUT"
+        echo "EOF" >> "$GITHUB_OUTPUT"
         
         # Get changelog since last tag
         if [[ -n "$LATEST_TAG" ]]; then
           CHANGELOG=$(git log --pretty=format:"- %s" $LATEST_TAG..HEAD)
-          echo "changelog<<EOF" >> $GITHUB_OUTPUT
-          echo "$CHANGELOG" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          echo "changelog<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$CHANGELOG" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
         else
-          echo "changelog<<EOF" >> $GITHUB_OUTPUT
-          echo "- Initial release" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          echo "changelog<<EOF" >> "$GITHUB_OUTPUT"
+          echo "- Initial release" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
         fi
 
     - name: Create Git tag
+      if: steps.get_tag.outputs.should_release == 'true'
       run: |
-        NEW_TAG="${{ steps.get_tag.outputs.new_tag }}"
-        
-        # Check if tag already exists
-        if git rev-parse "$NEW_TAG" >/dev/null 2>&1; then
-          echo "Tag $NEW_TAG already exists!"
-          exit 1
-        fi
+        SDK_VERSION="${{ steps.get_tag.outputs.sdk_version }}"
         
         # Configure git and create tag
         git config user.name "github-actions[bot]"
         git config user.email "github-actions[bot]@users.noreply.github.com"
         
-        echo "Creating tag: $NEW_TAG"
-        git tag "$NEW_TAG"
-        git push origin "$NEW_TAG"
+        echo "Creating tag: $SDK_VERSION"
+        git tag "$SDK_VERSION"
+        git push origin "$SDK_VERSION"
 
     - name: Create GitHub Release
-      uses: softprops/action-gh-release@v1
+      if: steps.get_tag.outputs.should_release == 'true'
+      uses: softprops/action-gh-release@v2
       with:
-        tag_name: ${{ steps.get_tag.outputs.new_tag }}
-        name: "Votice SDK v${{ steps.get_tag.outputs.new_tag }}"
+        tag_name: ${{ steps.get_tag.outputs.sdk_version }}
+        name: "Votice SDK v${{ steps.get_tag.outputs.sdk_version }}"
         body: |
-          ## 🚀 Votice SDK v${{ steps.get_tag.outputs.new_tag }}
+          ## 🚀 Votice SDK v${{ steps.get_tag.outputs.sdk_version }}
           
           ### Changes in this release:
           ${{ steps.get_tag.outputs.changelog }}
@@ -109,14 +103,14 @@ jobs:
           
           ```swift
           dependencies: [
-              .package(url: "https://github.com/ArtCC/votice-sdk.git", from: "${{ steps.get_tag.outputs.new_tag }}")
+              .package(url: "https://github.com/ArtCC/votice-sdk.git", from: "${{ steps.get_tag.outputs.sdk_version }}")
           ]
           ```
           
           Or add it through Xcode:
           1. File → Add Package Dependencies
           2. Enter: `https://github.com/ArtCC/votice-sdk.git`
-          3. Select version: `${{ steps.get_tag.outputs.new_tag }}`
+          3. Select version: `${{ steps.get_tag.outputs.sdk_version }}`
           
           ---
           *This release was automatically generated from commit ${{ github.sha }}*

@@ -20,33 +20,10 @@ jobs:
       with:
         xcode-version: 'latest-stable'
 
-    - name: Ensure matching iOS Simulator runtime is installed
-      run: |
-        set -eo pipefail
-        XCODE_VERSION=$(xcodebuild -version | awk 'NR==1 { print $2 }')
-        DESIRED_RUNTIME=$(echo "$XCODE_VERSION" | cut -d'.' -f1,2)
-        if xcrun simctl list runtimes | grep -q "iOS ${DESIRED_RUNTIME}"; then
-          echo "✅ iOS ${DESIRED_RUNTIME} runtime already installed"
-          exit 0
-        fi
-
-        echo "ℹ️  iOS ${DESIRED_RUNTIME} runtime missing. Downloading..."
-        sudo xcodebuild -license accept
-        sudo xcodebuild -runFirstLaunch || true
-        sudo xcodebuild -downloadPlatform iOS
-
-        if ! xcrun simctl list runtimes | grep -q "iOS ${DESIRED_RUNTIME}"; then
-          echo "❌ Failed to install iOS ${DESIRED_RUNTIME} runtime"
-          exit 1
-        fi
-        echo "✅ Installed iOS ${DESIRED_RUNTIME} runtime"
-
-    - name: List available simulators
+    - name: Show build environment
       run: |
         echo "=== Xcode version ==="
         xcodebuild -version
-        echo "=== Available iOS Simulators ==="
-        xcrun simctl list devices ios
         echo "=== Available destinations ==="
         xcodebuild -project Example/VoticeDemo/VoticeDemo.xcodeproj -scheme VoticeDemo -showdestinations
 
@@ -55,52 +32,9 @@ jobs:
 
     - name: Build iOS Example
       run: |
-        cd Example/VoticeDemo
-
-        SIMULATOR_INFO=$(xcrun simctl list devices available --json | \
-          jq -r '
-            [
-              .devices
-              | to_entries[]
-              | select(.key | contains("iOS")) as $entry
-              | $entry.value[]
-              | select(.name | startswith("iPhone"))
-              | (
-                  $entry.key as $runtime
-                  | {
-                      name: .name,
-                      udid: .udid,
-                      version_parts: (try($runtime | capture("iOS-(?<ver>[0-9-]+)") | .ver | split("-") | map(tonumber)) // []),
-                      version_str: (try($runtime | capture("iOS-(?<ver>[0-9-]+)") | .ver | gsub("-"; ".")) // "")
-                    }
-                )
-            ]
-            | sort_by(.version_parts)
-            | last
-            | select(. != null)
-            | "\(.version_str)|\(.name)|\(.udid)"
-          ')
-
-        if [ -z "$SIMULATOR_INFO" ]; then
-          echo "❌ No iPhone simulators found, trying generic platform"
-          xcodebuild -project VoticeDemo.xcodeproj \
-                     -scheme VoticeDemo \
-                     -destination 'generic/platform=iOS Simulator' \
-                     build \
-                     CODE_SIGN_IDENTITY="" \
-                     CODE_SIGNING_REQUIRED=NO
-        else
-          IOS_VERSION=$(echo "$SIMULATOR_INFO" | cut -d'|' -f1)
-          DEVICE_NAME=$(echo "$SIMULATOR_INFO" | cut -d'|' -f2)
-          DEVICE_UDID=$(echo "$SIMULATOR_INFO" | cut -d'|' -f3)
-
-          echo "✅ Using simulator: $DEVICE_NAME (iOS $IOS_VERSION)"
-          echo "   UDID: $DEVICE_UDID"
-
-          xcodebuild -project VoticeDemo.xcodeproj \
-                     -scheme VoticeDemo \
-                     -destination "platform=iOS Simulator,id=$DEVICE_UDID" \
-                     build \
-                     CODE_SIGN_IDENTITY="" \
-                     CODE_SIGNING_REQUIRED=NO
-        fi
+        xcodebuild -project Example/VoticeDemo/VoticeDemo.xcodeproj \
+                   -scheme VoticeDemo \
+                   -destination 'generic/platform=iOS Simulator' \
+                   build \
+                   CODE_SIGN_IDENTITY="" \
+                   CODE_SIGNING_REQUIRED=NO
