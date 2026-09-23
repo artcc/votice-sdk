@@ -195,7 +195,7 @@ final class SuggestionDetailViewModel: ObservableObject {
 
     func deleteSuggestion(_ suggestion: SuggestionEntity) async {
         do {
-            try await SuggestionUseCase().deleteSuggestion(suggestionId: suggestion.id)
+            _ = try await SuggestionUseCase().deleteSuggestion(suggestionId: suggestion.id)
         } catch {
             LogManager.shared.devLog(
                 .error, "SuggestionDetailViewModel: failed to delete suggestion \(suggestion.id): \(error)"

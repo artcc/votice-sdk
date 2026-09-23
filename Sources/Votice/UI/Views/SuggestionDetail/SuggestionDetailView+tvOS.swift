@@ -175,7 +175,7 @@ extension SuggestionDetailView {
                         case .success(let image):
                             image
                                 .resizable()
-                                .aspectRatio(contentMode: .fit)
+                                .scaledToFit()
                                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
                         case .empty:
                             HStack {
@@ -190,6 +190,14 @@ extension SuggestionDetailView {
                                 Spacer()
                             }
                         case .failure:
+                            HStack {
+                                Spacer()
+                                Image(systemName: "photo")
+                                    .foregroundColor(theme.colors.primary)
+                                    .font(.system(size: 150, weight: .semibold))
+                                Spacer()
+                            }
+                        @unknown default:
                             HStack {
                                 Spacer()
                                 Image(systemName: "photo")

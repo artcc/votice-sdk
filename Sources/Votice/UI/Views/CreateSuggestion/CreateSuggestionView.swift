@@ -361,7 +361,7 @@ private extension CreateSuggestionView {
                     if let imageData = viewModel.issueImageData, let nsImage = NSImage(data: imageData) {
                         Image(nsImage: nsImage)
                             .resizable()
-                            .aspectRatio(contentMode: .fill)
+                            .scaledToFill()
                             .frame(width: 150, height: 150)
                             .clipShape(RoundedRectangle(cornerRadius: theme.cornerRadius.sm))
                             .overlay(
@@ -391,7 +391,7 @@ private extension CreateSuggestionView {
 
 #if os(iOS)
     var photosPicker: some View {
-        PhotosPicker(selection: $selectedPhotoItem, matching: .images) {
+        PhotosPicker(selection: $selectedPhotoItem, matching: .images) { [imageData = viewModel.issueImageData] in
             HStack {
                 Image(systemName: "paperclip")
                     .foregroundColor(theme.colors.primary)
@@ -399,10 +399,10 @@ private extension CreateSuggestionView {
                     .font(theme.typography.callout)
                     .foregroundColor(theme.colors.onSurface)
                 Spacer()
-                if let imageData = viewModel.issueImageData, let uiImage = UIImage(data: imageData) {
+                if let imageData, let uiImage = UIImage(data: imageData) {
                     Image(uiImage: uiImage)
                         .resizable()
-                        .aspectRatio(contentMode: .fill)
+                        .scaledToFill()
                         .frame(width: 40, height: 40)
                         .clipShape(RoundedRectangle(cornerRadius: theme.cornerRadius.sm))
                         .overlay(

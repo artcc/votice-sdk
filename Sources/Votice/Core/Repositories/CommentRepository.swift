@@ -54,6 +54,6 @@ final class CommentRepository: CommentRepositoryProtocol {
         let bodyData = try JSONEncoder().encode(request)
         let endpoint = NetworkEndpoint(path: "/v1/sdk/comments/delete", method: .POST, body: bodyData)
 
-        try await networkManager.request(endpoint: endpoint, responseType: BaseResponse.self)
+        _ = try await networkManager.request(endpoint: endpoint, responseType: BaseResponse.self)
     }
 }

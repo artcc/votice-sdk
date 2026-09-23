@@ -1,22 +1,43 @@
-# Votice SDK
+<p align="center">
+  <img src="assets/image.png" alt="Votice Icon" width="120" />
+</p>
 
-| <img src="assets/light_icon.png" alt="Votice Icon" width="120" /> | 🗳️ A lightweight native Swift SDK to collect suggestions, feedback and votes directly within your iOS, iPadOS, macOS and tvOS app. |
-|:---:|:---|
+<h1 align="center">Votice SDK</h1>
 
-[![Swift](https://img.shields.io/badge/Swift-6-orange.svg)](https://swift.org/)
-[![Platforms](https://img.shields.io/badge/Platforms-iOS%2017%2B%20%7C%20iPadOS%2017%2B%20%7C%20macOS%2014%2B-lightgrey)](#)
-[![SPM](https://img.shields.io/badge/SPM-compatible-brightgreen)](https://swift.org/package-manager/)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+<p align="center">
+  🗳️ A lightweight native Swift SDK to collect suggestions, feedback and votes directly within your iOS, iPadOS, macOS and tvOS app.
+</p>
+
+<p align="center">
+  <a href="https://swift.org/"><img src="https://img.shields.io/badge/Swift-6-orange.svg" alt="Swift" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/Platforms-iOS%2017%2B%20%7C%20iPadOS%2017%2B%20%7C%20macOS%2014%2B-lightgrey" alt="Platforms" /></a>
+  <a href="https://swift.org/package-manager/"><img src="https://img.shields.io/badge/SPM-compatible-brightgreen" alt="SPM" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License" /></a>
+</p>
 
 Votice is a native Swift SDK that allows you to integrate user feedback, suggestion boards, issues, and voting mechanisms in your app with a clean UI and a simple setup. It connects to a custom backend using HMAC authentication and does not require Firebase or other configurations.
 
-<p align="leading">
-  <img src="assets/ios_light_1.png" alt="Votice iOS Screenshot 1" width="150" style="margin-right:5px;" />
-  <img src="assets/ios_light_2.png" alt="Votice iOS Screenshot 2" width="150" style="margin-right:5px;" />
-  <img src="assets/ios_light_3.png" alt="Votice iOS Screenshot 3" width="150" style="margin-right:5px;" />
-  <img src="assets/ios_light_4.png" alt="Votice iOS Screenshot 4" width="150" style="margin-right:5px;" />
+<p align="center">
+  <img src="assets/ios_light_1.png" alt="Votice iOS Screenshot 1" width="150" />
+  <img src="assets/ios_light_2.png" alt="Votice iOS Screenshot 2" width="150" />
+  <img src="assets/ios_light_3.png" alt="Votice iOS Screenshot 3" width="150" />
+  <img src="assets/ios_light_4.png" alt="Votice iOS Screenshot 4" width="150" />
   <img src="assets/ios_light_5.png" alt="Votice iOS Screenshot 5" width="150" />
 </p>
+
+## Contents
+
+- [📱 Management App](#-management-app)
+- [✅ Requirements](#-requirements)
+- [🛠 Installation](#-installation)
+- [📦 Package Info](#-package-info)
+- [🚀 Getting Started](#-getting-started)
+- [🔧 Advanced: Using Use Cases Programmatically (Optional)](#-advanced-using-use-cases-programmatically-optional)
+- [👨🏻‍💻 Contributing to Votice SDK](#-contributing-to-votice-sdk)
+- [👤 Author](#-author)
+- [License](#license)
+
+---
 
 ## 📱 Management App
 
@@ -35,12 +56,14 @@ The Votice management app for handling suggestions or issues and apps is availab
 - SwiftUI-based project
 - Votice backend properly configured (API key + secret)
 
+---
+
 ## 🛠 Installation
 
 Add this line to your `Package.swift` dependencies:
 
 ```swift
-.package(url: "https://github.com/artcc/votice-sdk", from: "1.0.25"),
+.package(url: "https://github.com/artcc/votice-sdk", from: "1.0.30"),
 ```
 
 Or via Xcode:
@@ -49,6 +72,8 @@ Or via Xcode:
 2. Go to **File > Add Packages...**
 3. Enter the URL of the Votice repo: https://github.com/artcc/votice-sdk
 4. Choose the latest version.
+
+---
 
 ## 📦 Package Info
 
@@ -80,6 +105,8 @@ let package = Package(
     ]
 )
 ```
+
+---
 
 ## 🚀 Getting Started
 
@@ -260,6 +287,7 @@ Then pass it to the feedback view:
 Votice.feedbackView(theme: theme)
 ```
 
+> [!NOTE]
 > ℹ️ If you do not configure custom fonts, the SDK will use the default system fonts.
 
 ### 6. Comment on suggestions or issues (Optional)
@@ -283,27 +311,32 @@ Votice.setUserIsPremium(isPremium: Bool)
 By default, Votice SDK runs silently to avoid cluttering your development console. If you need to troubleshoot SDK issues or see internal operations, you can enable debug logging (Default is disabled):
 
 Enable debug logging (useful for troubleshooting):
+
 ```swift
 Votice.setDebugLogging(enabled: true)
 ```
 
 Check current logging status:
+
 ```swift
 let isLoggingEnabled = Votice.isDebugLoggingEnabled
 ```
 
 Disable when no longer needed:
+
 ```swift
 Votice.setDebugLogging(enabled: false)
 ```
 
 **When to use debug logging:**
+
 - Troubleshooting network requests to your backend
 - Verifying SDK configuration
 - Understanding internal SDK behavior
 - During development/testing phases
 
-**Note:** Debug logging is automatically disabled in production builds and should only be enabled when specifically needed for debugging purposes.
+> [!NOTE]
+> **Note:** Debug logging is automatically disabled in production builds and should only be enabled when specifically needed for debugging purposes.
 
 ### 8. Show completed suggestions or issues in a separate tab (Optional)
 
@@ -316,10 +349,13 @@ You can choose to display suggestions or issues with status `completed` in their
 - If you don't enable it, the behavior remains the same as before.
 
 Enable:
+
 ```swift
 Votice.setShowCompletedSeparately(enabled: true)
 ```
+
 Disable (returns to original behavior):
+
 ```swift
 Votice.setShowCompletedSeparately(enabled: false)
 ```
@@ -329,31 +365,37 @@ Votice.setShowCompletedSeparately(enabled: false)
 By default, all optional statuses (`accepted`, `blocked`, `rejected`) are visible along with the mandatory ones. You can choose which optional statuses to show in both the list and the filter menu.
 
 Mandatory statuses (always shown):
+
 - `completed` (or in its separate tab if you enabled section 8)
 - `in-progress`
 - `pending`
 
 Optional statuses (individually hideable):
+
 - `accepted`
 - `blocked`
 - `rejected`
 
 Configure which optional statuses are visible:
+
 ```swift
 // Example: show accepted & rejected, hide blocked
 Votice.setVisibleOptionalStatuses(accepted: true, blocked: false, rejected: true)
 ```
 
 Behavior:
+
 - Hidden optional statuses are removed from the filter menu and never displayed in the list.
 - If a previously selected (persisted) filter becomes hidden, it is automatically cleared.
 - Works together with the "completed separately" mode (section 8). If that mode is active, `completed` will still not appear in filters, regardless of this configuration.
 - Defaults: all three optional statuses visible (equivalent to `true, true, true`).
 
 Use cases:
+
 - Simplify the board for early product phases (e.g. only pending + in-progress + completed)
 - Gradually introduce refinement states later (enable accepted / blocked / rejected)
 
+> [!NOTE]
 > Note: Calling this method multiple times replaces the previous configuration entirely.
 
 ### 10. Enable Liquid Glass design (Optional)
@@ -361,30 +403,36 @@ Use cases:
 You can opt-in to use **Liquid Glass**, Apple's modern design material that combines dynamic blur with light reflection effects, creating a fluid and immersive glass-like interface. When enabled, UI components like dropdowns, cards, and sheets will adopt this new visual style (Default is enabled).
 
 Enable Liquid Glass:
+
 ```swift
 Votice.setLiquidGlassEnabled(true)
 ```
 
 Disable (returns to the classic design):
+
 ```swift
 Votice.setLiquidGlassEnabled(false)
 ```
 
 **Platform requirements:**
+
 - iOS 26+ / iPadOS 26+ / macOS 26+ (Tahoe) / tvOS 26+
 - On older OS versions, the SDK will automatically fall back to the classic design even if enabled
 
 **Benefits of Liquid Glass:**
+
 - Modern, fluid glass-like visual design
 - Dynamic blur that adapts to content behind
 - Light and color reflection from surrounding elements
 - Interactive effects that respond to touch and pointer interactions
 
 **Default behavior:**
+
 - Disabled by default for maximum compatibility
 - Developers must explicitly opt-in to use Liquid Glass
 - Works seamlessly with custom themes
 
+> [!NOTE]
 > Note: Liquid Glass is a cutting-edge design feature introduced in Apple's latest OS versions. Test thoroughly with your app's design system before shipping to production.
 
 ---
@@ -396,6 +444,7 @@ If you need to interact with Votice functionality without using the built-in UI 
 ### Overview
 
 Votice SDK exposes two main use cases:
+
 - **SuggestionUseCase**: Manage suggestions, issues, votes, and images
 - **CommentUseCase**: Manage comments on suggestions or issues
 
@@ -646,6 +695,9 @@ Task {
 
 ### Public Models Reference
 
+<details>
+<summary>Key Entities · Response Types</summary>
+
 #### Key Entities
 
 ```swift
@@ -719,6 +771,8 @@ public struct CreateCommentResponse {
 }
 ```
 
+</details>
+
 ### Use Case Best Practices
 
 1. **Always configure the SDK first**:
@@ -756,6 +810,9 @@ public struct CreateCommentResponse {
 ### Example: Custom Suggestion List
 
 Here's a complete example of building a custom suggestion list (works for both suggestions and issues):
+
+<details>
+<summary>Example: Custom Suggestion List</summary>
 
 ```swift
 import SwiftUI
@@ -822,6 +879,8 @@ struct CustomSuggestionListView: View {
 }
 ```
 
+</details>
+
 ---
 
 ## 👨🏻‍💻 Contributing to Votice SDK
@@ -829,7 +888,7 @@ struct CustomSuggestionListView: View {
 Thank you for your interest in contributing to **Votice**!  
 This guide will help you submit issues, propose changes, and open pull requests in a way that fits the project.
 
-## 🐞 Reporting Bugs
+### 🐞 Reporting Bugs
 
 If you find a bug:
 
@@ -840,18 +899,22 @@ If you find a bug:
   - Expected and actual behavior
   - SDK version and platform
 
-## 🚀 Feature Requests
+### 🚀 Feature Requests
 
 We welcome feedback!
 
 - If it's a major change, open an issue first to discuss.
 - Make sure it aligns with the lightweight philosophy of the SDK.
 
+---
+
 ## 👤 Author
 
 Arturo Carretero Calvo
 
 [@artcc](https://github.com/artcc)
+
+---
 
 ## License
 

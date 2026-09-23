@@ -438,7 +438,7 @@ private extension SuggestionDetailView {
             AsyncImage(url: URL(string: currentSuggestion.urlImage ?? "")) { image in
                 image
                     .resizable()
-                    .aspectRatio(contentMode: .fit)
+                    .scaledToFit()
                     .frame(maxHeight: 600)
                     .cornerRadius(theme.cornerRadius.md)
             } placeholder: {

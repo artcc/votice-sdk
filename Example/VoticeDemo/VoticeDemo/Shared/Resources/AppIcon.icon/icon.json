@@ -4,8 +4,8 @@
     {
       "layers" : [
         {
-          "image-name" : "original.png",
-          "name" : "original"
+          "image-name" : "image.png",
+          "name" : "image"
         }
       ],
       "shadow" : {
