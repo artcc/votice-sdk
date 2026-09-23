@@ -212,7 +212,7 @@ private extension HomeView {
             Votice.setFonts(customFonts)
             Votice.setDebugLogging(enabled: true)
             Votice.setCommentIsEnabled(enabled: true)
-            Votice.setShowCompletedSeparately(enabled: true)
+            Votice.setShowCompletedSeparately(enabled: false)
             Votice.setVisibleOptionalStatuses(accepted: true, blocked: true, rejected: true)
             Votice.setUserIsPremium(isPremium: true)
             Votice.setLiquidGlassEnabled(true)

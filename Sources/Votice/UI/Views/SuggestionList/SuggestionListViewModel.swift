@@ -252,7 +252,7 @@ private extension SuggestionListViewModel {
         let pagination = PaginationRequest(startAfter: nil, pageLimit: pageSize)
         let response = try await suggestionUseCase.fetchSuggestions(
             status: selectedFilter,
-            excludeCompleted: false,
+            excludeCompleted: selectedFilter == nil,
             pagination: pagination
         )
 
@@ -366,7 +366,7 @@ private extension SuggestionListViewModel {
             let pagination = PaginationRequest(startAfter: startAfter(for: singleFeed), pageLimit: pageSize)
             let response = try await suggestionUseCase.fetchSuggestions(
                 status: selectedFilter,
-                excludeCompleted: false,
+                excludeCompleted: selectedFilter == nil,
                 pagination: pagination
             )
 
@@ -528,7 +528,7 @@ private extension SuggestionListViewModel {
 
         // No filter selected: apply visibility based on configuration
         let visibleOptional = ConfigurationManager.shared.optionalVisibleStatuses
-        let mandatory: Set<SuggestionStatusEntity> = [.inProgress, .pending, .completed]
+        let mandatory: Set<SuggestionStatusEntity> = [.inProgress, .pending]
         let allowed: Set<SuggestionStatusEntity> = visibleOptional.union(mandatory)
 
         suggestions = singleFeed.filter { allowed.contains($0.status ?? .pending) }

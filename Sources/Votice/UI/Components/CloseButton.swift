@@ -27,9 +27,11 @@ struct CloseButton: View {
                 .font(.system(size: 18, weight: .medium))
                 .foregroundColor(theme.colors.primary)
                 .padding(theme.spacing.sm)
-                .background(
-                    Circle()
-                        .fill(useLiquidGlass ? .clear : theme.colors.primary.opacity(0.1))
+                .frame(minWidth: 44, minHeight: 44)
+                .contentShape(Circle())
+                .adaptiveCircularGlassBackground(
+                    useLiquidGlass: useLiquidGlass,
+                    fillColor: theme.colors.primary.opacity(0.1)
                 )
         }
         .buttonStyle(.plain)

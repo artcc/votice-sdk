@@ -64,7 +64,13 @@ struct CommentCard: View {
                 .foregroundColor(theme.colors.onSurface)
         }
         .padding(theme.spacing.md)
-        .background(theme.colors.surface)
-        .cornerRadius(theme.cornerRadius.md)
+        .background {
+            RoundedRectangle(cornerRadius: theme.cornerRadius.md)
+                .fill(theme.colors.surface)
+        }
+        .overlay {
+            RoundedRectangle(cornerRadius: theme.cornerRadius.md)
+                .stroke(theme.colors.secondary.opacity(0.1), lineWidth: 1)
+        }
     }
 }
