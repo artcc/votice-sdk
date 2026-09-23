@@ -189,7 +189,7 @@ private extension SuggestionDetailView {
 
     var mainContent: some View {
         ScrollView(showsIndicators: false) {
-            VStack(alignment: .leading, spacing: theme.spacing.xl) {
+            VStack(alignment: .leading, spacing: theme.spacing.lg) {
                 suggestionHeaderCard
                 if let issue = currentSuggestion.issue,
                    let urlImage = currentSuggestion.urlImage,
@@ -210,7 +210,7 @@ private extension SuggestionDetailView {
     }
 
     var suggestionHeaderCard: some View {
-        VStack(spacing: 5) {
+        VStack(spacing: theme.spacing.xs) {
             HStack {
                 Spacer()
                 StatusBadge(
@@ -255,7 +255,11 @@ private extension SuggestionDetailView {
         .background(
             RoundedRectangle(cornerRadius: theme.cornerRadius.lg)
                 .fill(theme.colors.surface)
-                .shadow(color: .black.opacity(0.1), radius: 2, x: 0, y: 1)
+                .shadow(color: .black.opacity(0.04), radius: 3, x: 0, y: 1)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: theme.cornerRadius.lg)
+                .stroke(theme.colors.secondary.opacity(0.1), lineWidth: 1)
         )
     }
 
@@ -316,7 +320,7 @@ private extension SuggestionDetailView {
                     HStack(spacing: 4) {
                         Image(systemName: viewModel.comments.count > 0 ? "bubble.left.fill" : "bubble.left")
                             .font(.caption)
-                            .foregroundColor(theme.colors.accent)
+                            .foregroundColor(theme.colors.secondary.opacity(0.75))
                         Text("\(viewModel.comments.count) \(TextManager.shared.texts.comments)")
                             .font(theme.typography.callout)
                             .foregroundColor(theme.colors.secondary)
@@ -328,7 +332,11 @@ private extension SuggestionDetailView {
         .background(
             RoundedRectangle(cornerRadius: theme.cornerRadius.lg)
                 .fill(theme.colors.surface)
-                .shadow(color: .black.opacity(0.1), radius: 2, x: 0, y: 1)
+                .shadow(color: .black.opacity(0.04), radius: 3, x: 0, y: 1)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: theme.cornerRadius.lg)
+                .stroke(theme.colors.secondary.opacity(0.1), lineWidth: 1)
         )
     }
 
@@ -375,23 +383,23 @@ private extension SuggestionDetailView {
     }
 
     var commentsEmptyState: some View {
-        VStack(spacing: theme.spacing.md) {
+        VStack(spacing: theme.spacing.sm) {
             Image(systemName: "bubble.left")
-                .font(.system(size: 40))
+                .font(.system(size: 32))
                 .foregroundColor(theme.colors.secondary.opacity(0.5))
             Text(TextManager.shared.texts.noComments)
                 .font(theme.typography.body)
                 .foregroundColor(theme.colors.secondary)
                 .multilineTextAlignment(.center)
         }
-        .padding(theme.spacing.xl)
+        .padding(theme.spacing.lg)
         .frame(maxWidth: .infinity)
         .background(
             RoundedRectangle(cornerRadius: theme.cornerRadius.lg)
-                .fill(theme.colors.surface.opacity(0.5))
+                .fill(theme.colors.surface)
                 .overlay(
                     RoundedRectangle(cornerRadius: theme.cornerRadius.lg)
-                        .stroke(theme.colors.secondary.opacity(0.2), style: StrokeStyle(lineWidth: 1, dash: [5]))
+                        .stroke(theme.colors.secondary.opacity(0.1), lineWidth: 1)
                 )
         )
     }
@@ -435,25 +443,21 @@ private extension SuggestionDetailView {
             }
             .padding(.top, theme.spacing.md)
             .padding(.horizontal, theme.spacing.md)
-            AsyncImage(url: URL(string: currentSuggestion.urlImage ?? "")) { image in
-                image
-                    .resizable()
-                    .scaledToFit()
-                    .frame(maxHeight: 600)
-                    .cornerRadius(theme.cornerRadius.md)
-            } placeholder: {
-                RoundedRectangle(cornerRadius: theme.cornerRadius.md)
-                    .fill(theme.colors.secondary.opacity(0.1))
-                    .frame(height: 250)
-                    .overlay(
-                        VStack(spacing: theme.spacing.sm) {
-                            ProgressView()
-                                .progressViewStyle(CircularProgressViewStyle(tint: theme.colors.primary))
-                            Text(TextManager.shared.texts.loadingImage)
-                                .font(theme.typography.caption)
-                                .foregroundColor(theme.colors.secondary)
-                        }
-                    )
+            AsyncImage(url: URL(string: currentSuggestion.urlImage ?? "")) { phase in
+                switch phase {
+                case .success(let image):
+                    image
+                        .resizable()
+                        .scaledToFit()
+                        .frame(maxWidth: .infinity, maxHeight: 600)
+                        .clipShape(RoundedRectangle(cornerRadius: theme.cornerRadius.md))
+                case .empty:
+                    issueImagePlaceholder(isLoading: true)
+                case .failure:
+                    issueImagePlaceholder(isLoading: false)
+                @unknown default:
+                    issueImagePlaceholder(isLoading: false)
+                }
             }
             .padding(.horizontal, theme.spacing.md)
             .padding(.bottom, theme.spacing.md)
@@ -461,7 +465,34 @@ private extension SuggestionDetailView {
         .background(
             RoundedRectangle(cornerRadius: theme.cornerRadius.lg)
                 .fill(theme.colors.surface)
-                .shadow(color: .black.opacity(0.1), radius: 2, x: 0, y: 1)
+                .shadow(color: .black.opacity(0.04), radius: 3, x: 0, y: 1)
         )
+        .overlay(
+            RoundedRectangle(cornerRadius: theme.cornerRadius.lg)
+                .stroke(theme.colors.secondary.opacity(0.1), lineWidth: 1)
+        )
+    }
+
+    func issueImagePlaceholder(isLoading: Bool) -> some View {
+        RoundedRectangle(cornerRadius: theme.cornerRadius.md)
+            .fill(theme.colors.secondary.opacity(0.08))
+            .frame(height: 250)
+            .overlay {
+                VStack(spacing: theme.spacing.sm) {
+                    if isLoading {
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle(tint: theme.colors.primary))
+                    } else {
+                        Image(systemName: "photo")
+                            .font(.title2)
+                            .foregroundColor(theme.colors.secondary)
+                    }
+                    Text(isLoading ? TextManager.shared.texts.loadingImage : TextManager.shared.texts.genericError)
+                        .font(theme.typography.caption)
+                        .foregroundColor(theme.colors.secondary)
+                        .multilineTextAlignment(.center)
+                }
+                .padding(theme.spacing.md)
+            }
     }
 }
