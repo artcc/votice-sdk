@@ -116,6 +116,8 @@ private extension FilterMenuView {
                         .frame(width: 8, height: 8)
                 }
             }
+            .frame(minWidth: 44, minHeight: 44)
+            .contentShape(Rectangle())
         }
     }
 
@@ -141,12 +143,14 @@ private extension FilterMenuView {
                 RoundedRectangle(cornerRadius: theme.cornerRadius.sm)
                     .fill(theme.colors.primary.opacity(0.15))
             )
+            .frame(minWidth: 44, minHeight: 44)
+            .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
         .overlay(alignment: .topTrailing) {
             if isExpanded {
                 filterDropdown
-                    .offset(y: 40)
+                    .offset(y: 44)
                     .transition(.asymmetric(
                         insertion: .scale(scale: 0.95, anchor: .topTrailing).combined(with: .opacity),
                         removal: .scale(scale: 0.95, anchor: .topTrailing).combined(with: .opacity)

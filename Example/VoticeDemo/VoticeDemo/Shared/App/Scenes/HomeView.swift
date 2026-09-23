@@ -89,7 +89,7 @@ private extension HomeView {
                             .padding(.bottom, 20)
                     }
                     .frame(minHeight: proxy.size.height)
-                    .navigationTitle("Votice Demo")
+                    .navigationTitle("Votice SDK Demo")
                     .navigationBarTitleDisplayMode(.inline)
                 }
                 .scrollBounceBehavior(.basedOnSize)

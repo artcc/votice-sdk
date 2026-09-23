@@ -13,8 +13,6 @@ struct EmptyStateView: View {
 
     @Environment(\.voticeTheme) private var theme
 
-    @State private var isAnimating = false
-
     let title: String
     let message: String
 
@@ -34,67 +32,23 @@ struct EmptyStateView: View {
 
 private extension EmptyStateView {
     var contentView: some View {
-        VStack(spacing: theme.spacing.xl) {
-            ZStack {
-                Circle()
-                    .fill(
-                        LinearGradient(
-                            colors: [
-                                theme.colors.primary.opacity(0.1),
-                                theme.colors.accent.opacity(0.05)
-                            ],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
-                    .frame(width: 120, height: 120)
-                    .scaleEffect(isAnimating ? 1.05 : 1.0)
-                ZStack {
-                    Image(systemName: "lightbulb.circle.fill")
-                        .font(.system(size: 50))
-                        .foregroundColor(theme.colors.primary.opacity(0.2))
-                        .offset(x: 2, y: 2)
-                    Image(systemName: "lightbulb.circle.fill")
-                        .font(.system(size: 50))
-                        .foregroundStyle(
-                            LinearGradient(
-                                colors: [theme.colors.primary, theme.colors.accent],
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            )
-                        )
-                }
-                .rotationEffect(.degrees(isAnimating ? 5 : -5))
-                ForEach(0..<3) { index in
-                    Image(systemName: "sparkle")
-                        .font(.system(size: 12))
-                        .foregroundColor(theme.colors.accent)
-                        .offset(
-                            x: CGFloat([30, -35, 25][index]),
-                            y: CGFloat([-30, 20, -15][index])
-                        )
-                        .opacity(isAnimating ? 1.0 : 0.3)
-                        .scaleEffect(isAnimating ? 1.2 : 0.8)
-                        .animation(
-                            .easeInOut(duration: 2.0)
-                            .repeatForever(autoreverses: true)
-                            .delay(Double(index) * 0.3),
-                            value: isAnimating
-                        )
-                }
-            }
-            .onAppear {
-                withAnimation(.easeInOut(duration: 3.0).repeatForever(autoreverses: true)) {
-                    isAnimating = true
-                }
-            }
+        VStack(spacing: theme.spacing.lg) {
+            Image(systemName: "lightbulb")
+                .font(.system(size: 40))
+                .foregroundColor(theme.colors.primary)
+                .frame(width: 88, height: 88)
+                .background(Circle().fill(theme.colors.primary.opacity(0.08)))
             contentTextView
         }
-        .padding(theme.spacing.xl)
+        .padding(theme.spacing.lg)
         .background(
             RoundedRectangle(cornerRadius: theme.cornerRadius.lg)
                 .fill(theme.colors.surface)
-                .shadow(color: .black.opacity(0.1), radius: 2, x: 0, y: 1)
+                .shadow(color: .black.opacity(0.04), radius: 3, x: 0, y: 1)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: theme.cornerRadius.lg)
+                .stroke(theme.colors.secondary.opacity(0.1), lineWidth: 1)
         )
         .padding(.horizontal, theme.spacing.md)
     }
@@ -110,7 +64,7 @@ private extension EmptyStateView {
                 .font(theme.typography.body)
                 .foregroundColor(theme.colors.secondary)
                 .multilineTextAlignment(.center)
-                .lineLimit(3)
+                .fixedSize(horizontal: false, vertical: true)
             HStack {
                 Image(systemName: "arrow.up.circle.fill")
                     .foregroundColor(theme.colors.primary)

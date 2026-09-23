@@ -13,11 +13,10 @@ struct HeaderView: View {
 
     var body: some View {
         VStack(spacing: 10) {
-            Image(systemName: "star.bubble")
-                .font(.system(size: 60))
-                .foregroundColor(.accentColor)
-            Text("Votice SDK Demo")
-                .font(.poppins(.bold, size: 32))
+            Image("image")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 150, height: 150)
             Text("Test all the feedback features")
                 .font(.poppins(.regular, size: 16))
                 .foregroundColor(.secondary)

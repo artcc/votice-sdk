@@ -16,7 +16,7 @@ struct LoadingPaginationView: View {
     // MARK: - View
 
     var body: some View {
-        VStack(spacing: 10) {
+        VStack(spacing: theme.spacing.sm) {
             ProgressView()
                 .progressViewStyle(CircularProgressViewStyle(tint: theme.colors.primary))
             Text(TextManager.shared.texts.loadingMore)

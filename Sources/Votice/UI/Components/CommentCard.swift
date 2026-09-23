@@ -55,6 +55,7 @@ struct CommentCard: View {
                                 .font(.system(size: 12, weight: .medium))
                                 .foregroundColor(theme.colors.error)
                         }
+                        .frame(minWidth: 44, minHeight: 44)
                     }
                     .buttonStyle(.plain)
                 }
