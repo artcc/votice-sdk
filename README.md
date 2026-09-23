@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://swift.org/"><img src="https://img.shields.io/badge/Swift-6-orange.svg" alt="Swift" /></a>
-  <a href="#"><img src="https://img.shields.io/badge/Platforms-iOS%2017%2B%20%7C%20iPadOS%2017%2B%20%7C%20macOS%2014%2B-lightgrey" alt="Platforms" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/Platforms-iOS%2017%2B%20%7C%20iPadOS%2017%2B%20%7C%20macOS%2014%2B%20%7C%20tvOS%2017%2B-lightgrey" alt="Platforms" /></a>
   <a href="https://swift.org/package-manager/"><img src="https://img.shields.io/badge/SPM-compatible-brightgreen" alt="SPM" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License" /></a>
 </p>
