@@ -15,6 +15,7 @@ struct EmptyStateView: View {
 
     let title: String
     let message: String
+    var showsCreationHint: Bool = true
 
     // MARK: - View
 
@@ -58,21 +59,24 @@ private extension EmptyStateView {
             Text(title)
                 .font(theme.typography.title3)
                 .fontWeight(.medium)
-                .foregroundColor(theme.colors.onBackground)
+                .foregroundColor(theme.colors.onSurface)
                 .multilineTextAlignment(.center)
             Text(message)
                 .font(theme.typography.body)
                 .foregroundColor(theme.colors.secondary)
                 .multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)
-            HStack {
-                Image(systemName: "arrow.up.circle.fill")
-                    .foregroundColor(theme.colors.primary)
-                Text(TextManager.shared.texts.tapPlusToGetStarted)
-                    .font(theme.typography.caption)
-                    .foregroundColor(theme.colors.primary)
+            if showsCreationHint {
+                HStack {
+                    Image(systemName: "plus.circle")
+                        .foregroundColor(theme.colors.primary)
+                    Text(TextManager.shared.texts.tapPlusToGetStarted)
+                        .font(theme.typography.caption)
+                        .foregroundColor(theme.colors.primary)
+                        .multilineTextAlignment(.center)
+                }
+                .padding(.top, theme.spacing.sm)
             }
-            .padding(.top, theme.spacing.sm)
         }
     }
 }

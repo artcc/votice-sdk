@@ -128,6 +128,7 @@ private extension CreateSuggestionView {
                         .fill(viewModel.liquidGlassEnabled ? .clear : theme.colors.secondary.opacity(0.1))
                 )
                 .frame(minWidth: 44, minHeight: 44)
+                .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
     }
@@ -166,6 +167,7 @@ private extension CreateSuggestionView {
                         )
                 )
                 .frame(minWidth: 44, minHeight: 44)
+                .contentShape(Rectangle())
         }
         .disabled(!viewModel.isFormValid || viewModel.isSubmitting)
         .buttonStyle(.plain)

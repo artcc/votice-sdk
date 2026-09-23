@@ -280,16 +280,16 @@ extension SuggestionDetailView {
 
     func tvOSCommentCard(comment: CommentEntity) -> some View {
         VStack(alignment: .leading, spacing: theme.spacing.md) {
-            HStack {
+            VStack(alignment: .leading, spacing: theme.spacing.xs) {
                 HStack(spacing: 10) {
                     Image(systemName: "person.circle.fill")
                         .font(.system(size: 18))
                         .foregroundColor(theme.colors.secondary.opacity(0.7))
                     Text(comment.displayName)
                         .font(theme.typography.subheadline)
-                        .foregroundColor(theme.colors.secondary.opacity(0.7))
+                        .foregroundColor(theme.colors.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
-                Spacer()
                 if let createdAt = comment.createdAt, let date = Date.formatFromISOString(createdAt) {
                     HStack(spacing: 8) {
                         Image(systemName: "clock")
@@ -297,7 +297,8 @@ extension SuggestionDetailView {
                             .foregroundColor(theme.colors.secondary.opacity(0.6))
                         Text(date)
                             .font(theme.typography.subheadline)
-                            .foregroundColor(theme.colors.secondary.opacity(0.6))
+                            .foregroundColor(theme.colors.secondary)
+                            .fixedSize(horizontal: false, vertical: true)
                     }
                 }
             }

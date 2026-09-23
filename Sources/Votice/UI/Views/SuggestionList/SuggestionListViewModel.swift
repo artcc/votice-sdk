@@ -51,6 +51,9 @@ final class SuggestionListViewModel: ObservableObject {
     var suggestionsIsEmpty: Bool {
         suggestions.isEmpty
     }
+    var isShowingFilteredResults: Bool {
+        selectedFilter != nil || (showCompletedSeparately && selectedTab != 0)
+    }
     var currentSuggestionsList: [SuggestionEntity] {
         if showCompletedSeparately {
             return selectedTab == 0 ? suggestions : completedSuggestions
@@ -206,6 +209,10 @@ extension SuggestionListViewModel {
 
         if let filteredIndex = suggestions.firstIndex(where: { $0.id == suggestion.id }) {
             suggestions[filteredIndex] = suggestion
+        }
+
+        if !showCompletedSeparately {
+            applyVisibilityFilter()
         }
 
         Task {

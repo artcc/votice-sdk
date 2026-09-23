@@ -24,7 +24,7 @@ struct VoticeTextFieldStyle: TextFieldStyle {
             .cornerRadius(theme.cornerRadius.md)
             .overlay(
                 RoundedRectangle(cornerRadius: theme.cornerRadius.md)
-                    .stroke(theme.colors.secondary.opacity(0.18), lineWidth: 1)
+                    .stroke(theme.colors.secondary.opacity(0.3), lineWidth: 1)
             )
     }
     // swiftlint:enable identifier_name

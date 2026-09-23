@@ -149,6 +149,7 @@ private extension SuggestionDetailView {
                         .fill(viewModel.liquidGlassEnabled ? .clear : theme.colors.secondary.opacity(0.1))
                 )
                 .frame(minWidth: 44, minHeight: 44)
+                .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
     }
@@ -185,6 +186,7 @@ private extension SuggestionDetailView {
                     .foregroundColor(theme.colors.error)
             }
             .frame(minWidth: 44, minHeight: 44)
+            .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
     }

@@ -48,10 +48,10 @@ struct SuggestionCard: View {
                         VStack(spacing: theme.spacing.xs) {
                             Image(systemName: "bubble.left.fill")
                                 .font(.subheadline)
-                                .foregroundColor(theme.colors.secondary.opacity(0.75))
+                                .foregroundColor(theme.colors.secondary)
                             Text("\(suggestion.commentCount ?? 0)")
-                                .font(theme.typography.caption)
-                                .foregroundColor(theme.colors.secondary.opacity(0.75))
+                                .font(theme.typography.subheadline)
+                                .foregroundColor(theme.colors.secondary)
                         }
                     }
                 }

@@ -22,10 +22,13 @@ extension SuggestionListView {
                     tvOSSegmentedControl
                 }
                 if viewModel.currentSuggestionsList.isEmpty && !viewModel.isLoading {
-                    EmptyStateView(
-                        title: TextManager.shared.texts.noSuggestionsYet,
-                        message: TextManager.shared.texts.beFirstToSuggest
-                    )
+                    let title = viewModel.isShowingFilteredResults ?
+                    TextManager.shared.texts.noMatchingSuggestions :
+                    TextManager.shared.texts.noSuggestionsYet
+                    let message = viewModel.isShowingFilteredResults ?
+                    TextManager.shared.texts.noMatchingSuggestionsMessage :
+                    TextManager.shared.texts.noSuggestionsMessage
+                    EmptyStateView(title: title, message: message, showsCreationHint: false)
                 } else {
                     tvOSSuggestionsList
                 }
@@ -57,6 +60,15 @@ extension SuggestionListView {
                 .fontWeight(.regular)
                 .foregroundColor(theme.colors.onBackground)
             Spacer()
+            if !viewModel.showCompletedSeparately {
+                FilterMenuView(
+                    isExpanded: $viewModel.isFilterMenuExpanded,
+                    selectedFilter: viewModel.selectedFilter,
+                    useLiquidGlass: viewModel.liquidGlassEnabled
+                ) { status in
+                    viewModel.setFilter(status)
+                }
+            }
         }
         .padding(theme.spacing.llg)
         .zIndex(1)

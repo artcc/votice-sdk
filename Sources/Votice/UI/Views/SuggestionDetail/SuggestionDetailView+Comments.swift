@@ -89,6 +89,7 @@ extension SuggestionDetailView {
                         .fill(viewModel.liquidGlassEnabled ? .clear : theme.colors.secondary.opacity(0.1))
                 )
                 .frame(minWidth: 44, minHeight: 44)
+                .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
     }
@@ -123,6 +124,7 @@ extension SuggestionDetailView {
                         )
                 )
                 .frame(minWidth: 44, minHeight: 44)
+                .contentShape(Rectangle())
         }
         .disabled(!viewModel.isCommentFormValid || viewModel.isSubmittingComment)
         .buttonStyle(.plain)

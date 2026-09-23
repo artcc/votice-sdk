@@ -62,7 +62,7 @@ private extension StatusBadge {
             return texts.completed
         case .inProgress:
             if let progress {
-                return "\(texts.inProgress) \(progress)%"
+                return "\(texts.inProgress) \(min(max(progress, 0), 100))%"
             }
 
             return texts.inProgress
@@ -77,7 +77,7 @@ private extension StatusBadge {
         Text(statusText)
             .font(theme.typography.caption)
             .fontWeight(.medium)
-            .foregroundColor(statusColor)
+            .foregroundColor(theme.colors.onSurface)
             .padding(.vertical, theme.spacing.xs)
             .padding(.horizontal, theme.spacing.sm)
             .adaptiveGlassBackground(
@@ -95,7 +95,7 @@ private extension StatusBadge {
         return Text(statusText)
             .font(theme.typography.caption)
             .fontWeight(.medium)
-            .foregroundColor(statusColor)
+            .foregroundColor(theme.colors.onSurface)
             .padding(.vertical, theme.spacing.xs)
             .padding(.horizontal, theme.spacing.sm)
             .background {
