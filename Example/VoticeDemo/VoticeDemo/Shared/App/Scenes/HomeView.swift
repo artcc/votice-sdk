@@ -89,7 +89,7 @@ private extension HomeView {
                             .padding(.bottom, 20)
                     }
                     .frame(minHeight: proxy.size.height)
-                    .navigationTitle("Votice Demo")
+                    .navigationTitle("Votice SDK Demo")
                     .navigationBarTitleDisplayMode(.inline)
                 }
                 .scrollBounceBehavior(.basedOnSize)
@@ -212,7 +212,7 @@ private extension HomeView {
             Votice.setFonts(customFonts)
             Votice.setDebugLogging(enabled: true)
             Votice.setCommentIsEnabled(enabled: true)
-            Votice.setShowCompletedSeparately(enabled: true)
+            Votice.setShowCompletedSeparately(enabled: false)
             Votice.setVisibleOptionalStatuses(accepted: true, blocked: true, rejected: true)
             Votice.setUserIsPremium(isPremium: true)
             Votice.setLiquidGlassEnabled(true)

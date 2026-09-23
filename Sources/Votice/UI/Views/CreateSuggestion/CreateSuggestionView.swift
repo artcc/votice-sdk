@@ -127,6 +127,8 @@ private extension CreateSuggestionView {
                     Circle()
                         .fill(viewModel.liquidGlassEnabled ? .clear : theme.colors.secondary.opacity(0.1))
                 )
+                .frame(minWidth: 44, minHeight: 44)
+                .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
     }
@@ -164,6 +166,8 @@ private extension CreateSuggestionView {
                             : theme.colors.secondary.opacity(0.1)
                         )
                 )
+                .frame(minWidth: 44, minHeight: 44)
+                .contentShape(Rectangle())
         }
         .disabled(!viewModel.isFormValid || viewModel.isSubmitting)
         .buttonStyle(.plain)
@@ -187,7 +191,7 @@ private extension CreateSuggestionView {
 
     var mainContent: some View {
         ScrollView(showsIndicators: false) {
-            VStack(alignment: .leading, spacing: theme.spacing.xl) {
+            VStack(alignment: .leading, spacing: theme.spacing.lg) {
                 headerCard
                 formCard
                 Spacer(minLength: theme.spacing.md)
@@ -203,30 +207,13 @@ private extension CreateSuggestionView {
             HStack {
                 ZStack {
                     Circle()
-                        .fill(
-                            LinearGradient(
-                                colors: [
-                                    theme.colors.primary.opacity(0.2),
-                                    theme.colors.accent.opacity(0.1)
-                                ],
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            )
-                        )
-                        .frame(width: 50, height: 50)
+                        .fill(theme.colors.primary.opacity(0.1))
+                        .frame(width: 44, height: 44)
                     Image(systemName: viewModel.isIssue ? "exclamationmark.triangle.fill" : "lightbulb.fill")
-                        .font(.system(size: 22))
-                        .foregroundStyle(
-                            // swiftlint:disable line_length
-                            LinearGradient(
-                                colors: viewModel.isIssue ? [theme.colors.warning, theme.colors.accent] : [theme.colors.primary, theme.colors.accent],
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            )
-                            // swiftlint:enable line_length
-                        )
+                        .font(.system(size: 20))
+                        .foregroundColor(viewModel.isIssue ? theme.colors.warning : theme.colors.primary)
                 }
-                VStack(alignment: .leading, spacing: 5) {
+                VStack(alignment: .leading, spacing: theme.spacing.xs) {
                     Text(
                         viewModel.isIssue ?
                         TextManager.shared.texts.reportIssue : TextManager.shared.texts.shareYourIdea
@@ -248,12 +235,16 @@ private extension CreateSuggestionView {
         .background(
             RoundedRectangle(cornerRadius: theme.cornerRadius.lg)
                 .fill(theme.colors.surface)
-                .shadow(color: .black.opacity(0.1), radius: 2, x: 0, y: 1)
+                .shadow(color: .black.opacity(0.04), radius: 3, x: 0, y: 1)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: theme.cornerRadius.lg)
+                .stroke(theme.colors.secondary.opacity(0.1), lineWidth: 1)
         )
     }
 
     var formCard: some View {
-        VStack(alignment: .leading, spacing: theme.spacing.xl) {
+        VStack(alignment: .leading, spacing: theme.spacing.lg) {
             titleSection
             descriptionSection
             nicknameSection
@@ -263,7 +254,11 @@ private extension CreateSuggestionView {
         .background(
             RoundedRectangle(cornerRadius: theme.cornerRadius.lg)
                 .fill(theme.colors.surface)
-                .shadow(color: .black.opacity(0.1), radius: 2, x: 0, y: 1)
+                .shadow(color: .black.opacity(0.04), radius: 3, x: 0, y: 1)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: theme.cornerRadius.lg)
+                .stroke(theme.colors.secondary.opacity(0.1), lineWidth: 1)
         )
     }
 
@@ -468,8 +463,8 @@ private extension CreateSuggestionView {
 #if os(macOS)
     func createMacOSImageSelector() -> some View {
         VStack(spacing: 15) {
-            RoundedRectangle(cornerRadius: 10)
-                .stroke(theme.colors.primary.opacity(0.5), style: StrokeStyle(lineWidth: 2, dash: [5]))
+            RoundedRectangle(cornerRadius: theme.cornerRadius.md)
+                .stroke(theme.colors.primary.opacity(0.3), style: StrokeStyle(lineWidth: 1, dash: [5]))
                 .frame(height: 100)
                 .overlay(
                     VStack(spacing: 10) {
@@ -498,8 +493,8 @@ private extension CreateSuggestionView {
                 .foregroundColor(theme.colors.primary)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 15)
-                .background(theme.colors.primary.opacity(0.1))
-                .cornerRadius(10)
+                .background(theme.colors.primary.opacity(0.08))
+                .cornerRadius(theme.cornerRadius.md)
             }
             .buttonStyle(.plain)
         }

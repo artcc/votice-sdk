@@ -31,16 +31,20 @@ struct CommentCard: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: theme.spacing.sm) {
-            HStack {
-                Text(comment.displayName)
-                    .font(theme.typography.subheadline)
-                    .foregroundColor(theme.colors.secondary.opacity(0.7))
-                Spacer()
-                if let createdAt = comment.createdAt, let date = Date.formatFromISOString(createdAt) {
-                    Text(date)
+            HStack(alignment: .top) {
+                VStack(alignment: .leading, spacing: theme.spacing.xs) {
+                    Text(comment.displayName)
                         .font(theme.typography.subheadline)
-                        .foregroundColor(theme.colors.secondary.opacity(0.7))
+                        .foregroundColor(theme.colors.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                    if let createdAt = comment.createdAt, let date = Date.formatFromISOString(createdAt) {
+                        Text(date)
+                            .font(theme.typography.subheadline)
+                            .foregroundColor(theme.colors.secondary)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
                 }
+                Spacer(minLength: theme.spacing.sm)
                 if let commentDeviceId = comment.deviceId, commentDeviceId == currentDeviceId {
                     Button(role: .destructive) {
                         HapticManager.shared.warning()
@@ -55,6 +59,8 @@ struct CommentCard: View {
                                 .font(.system(size: 12, weight: .medium))
                                 .foregroundColor(theme.colors.error)
                         }
+                        .frame(minWidth: 44, minHeight: 44)
+                        .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
                 }
@@ -64,7 +70,13 @@ struct CommentCard: View {
                 .foregroundColor(theme.colors.onSurface)
         }
         .padding(theme.spacing.md)
-        .background(theme.colors.surface)
-        .cornerRadius(theme.cornerRadius.md)
+        .background {
+            RoundedRectangle(cornerRadius: theme.cornerRadius.md)
+                .fill(theme.colors.surface)
+        }
+        .overlay {
+            RoundedRectangle(cornerRadius: theme.cornerRadius.md)
+                .stroke(theme.colors.secondary.opacity(0.1), lineWidth: 1)
+        }
     }
 }

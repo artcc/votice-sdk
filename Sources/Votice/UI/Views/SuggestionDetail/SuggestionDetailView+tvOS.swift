@@ -18,11 +18,9 @@ extension SuggestionDetailView {
         ScrollView {
             Color.clear.focusable(true)
             VStack(alignment: .leading, spacing: theme.spacing.lg) {
-                customContentCard {
-                    VStack(alignment: .leading, spacing: theme.spacing.lg) {
-                        tvOSHeaderSection
-                        tvOSStatsCard
-                    }
+                VStack(alignment: .leading, spacing: theme.spacing.lg) {
+                    tvOSHeaderSection
+                    tvOSStatsCard
                 }
                 if let issue = currentSuggestion.issue,
                    let urlImage = currentSuggestion.urlImage,
@@ -85,7 +83,11 @@ extension SuggestionDetailView {
         .background(
             RoundedRectangle(cornerRadius: theme.cornerRadius.xl)
                 .fill(theme.colors.surface)
-                .shadow(color: .black.opacity(0.2), radius: 8, x: 0, y: 4)
+                .shadow(color: .black.opacity(0.04), radius: 3, x: 0, y: 1)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: theme.cornerRadius.xl)
+                .stroke(theme.colors.secondary.opacity(0.1), lineWidth: 1)
         )
     }
 
@@ -136,7 +138,7 @@ extension SuggestionDetailView {
                 HStack(spacing: theme.spacing.sm) {
                     Image(systemName: "bubble.left.fill")
                         .font(.system(size: 24))
-                        .foregroundColor(theme.colors.accent)
+                        .foregroundColor(theme.colors.secondary.opacity(0.75))
                     Text("\(viewModel.comments.count)")
                         .font(theme.typography.title3)
                         .foregroundColor(theme.colors.onSurface)
@@ -147,12 +149,15 @@ extension SuggestionDetailView {
             }
             Spacer()
         }
-        .padding(.horizontal, theme.spacing.lg)
-        .padding(.bottom, theme.spacing.lg)
+        .padding(theme.spacing.lg)
         .background(
             RoundedRectangle(cornerRadius: theme.cornerRadius.xl)
                 .fill(theme.colors.surface)
-                .shadow(color: .black.opacity(0.2), radius: 8, x: 0, y: 4)
+                .shadow(color: .black.opacity(0.04), radius: 3, x: 0, y: 1)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: theme.cornerRadius.xl)
+                .stroke(theme.colors.secondary.opacity(0.1), lineWidth: 1)
         )
     }
 
@@ -190,56 +195,36 @@ extension SuggestionDetailView {
                                 Spacer()
                             }
                         case .failure:
-                            HStack {
-                                Spacer()
-                                Image(systemName: "photo")
-                                    .foregroundColor(theme.colors.primary)
-                                    .font(.system(size: 150, weight: .semibold))
-                                Spacer()
-                            }
+                            tvOSImageErrorView
                         @unknown default:
-                            HStack {
-                                Spacer()
-                                Image(systemName: "photo")
-                                    .foregroundColor(theme.colors.primary)
-                                    .font(.system(size: 150, weight: .semibold))
-                                Spacer()
-                            }
+                            tvOSImageErrorView
                         }
                     }
                     .frame(height: 350)
                 }
             }
             .padding(theme.spacing.lg)
-            .background(
-                RoundedRectangle(cornerRadius: theme.cornerRadius.xl)
-                    .fill(theme.colors.surface)
-                    .shadow(color: .black.opacity(0.2), radius: 8, x: 0, y: 4)
-            )
         }
     }
 
     var tvOSCommentsSection: some View {
-        customContentCard {
-            VStack(alignment: .leading, spacing: theme.spacing.xl) {
-                HStack(spacing: theme.spacing.md) {
-                    Image(systemName: "bubble.left.and.bubble.right.fill")
-                        .foregroundColor(theme.colors.primary)
-                        .font(.system(size: 22, weight: .semibold))
-                    Text(TextManager.shared.texts.commentsSection)
-                        .font(theme.typography.title3)
-                        .foregroundColor(theme.colors.onSurface)
-                    Spacer()
-                }
-                if viewModel.isLoadingComments && viewModel.comments.isEmpty {
-                    tvOSCommentsLoadingView
-                } else if viewModel.comments.isEmpty && !viewModel.isLoadingComments {
-                    tvOSCommentsEmptyState
-                } else {
-                    tvOSCommentsList
-                }
+        VStack(alignment: .leading, spacing: theme.spacing.lg) {
+            HStack(spacing: theme.spacing.md) {
+                Image(systemName: "bubble.left.and.bubble.right.fill")
+                    .foregroundColor(theme.colors.primary)
+                    .font(.system(size: 22, weight: .semibold))
+                Text(TextManager.shared.texts.commentsSection)
+                    .font(theme.typography.title3)
+                    .foregroundColor(theme.colors.onSurface)
+                Spacer()
             }
-            .padding(theme.spacing.lg)
+            if viewModel.isLoadingComments && viewModel.comments.isEmpty {
+                tvOSCommentsLoadingView
+            } else if viewModel.comments.isEmpty && !viewModel.isLoadingComments {
+                tvOSCommentsEmptyState
+            } else {
+                tvOSCommentsList
+            }
         }
     }
 
@@ -252,11 +237,7 @@ extension SuggestionDetailView {
                 .foregroundColor(theme.colors.secondary)
         }
         .frame(maxWidth: .infinity)
-        .background(
-            RoundedRectangle(cornerRadius: theme.cornerRadius.xl)
-                .fill(theme.colors.surface)
-                .shadow(color: .black.opacity(0.2), radius: 8, x: 0, y: 4)
-        )
+        .padding(.vertical, theme.spacing.md)
     }
 
     var tvOSCommentsEmptyState: some View {
@@ -270,15 +251,7 @@ extension SuggestionDetailView {
                 .multilineTextAlignment(.center)
         }
         .frame(maxWidth: .infinity)
-        .padding(theme.spacing.xl)
-        .background(
-            RoundedRectangle(cornerRadius: theme.cornerRadius.xl)
-                .fill(theme.colors.surface.opacity(0.5))
-                .overlay(
-                    RoundedRectangle(cornerRadius: theme.cornerRadius.xl)
-                        .stroke(theme.colors.secondary.opacity(0.2), style: StrokeStyle(lineWidth: 2, dash: [10]))
-                )
-        )
+        .padding(theme.spacing.md)
     }
 
     var tvOSCommentsList: some View {
@@ -307,16 +280,16 @@ extension SuggestionDetailView {
 
     func tvOSCommentCard(comment: CommentEntity) -> some View {
         VStack(alignment: .leading, spacing: theme.spacing.md) {
-            HStack {
+            VStack(alignment: .leading, spacing: theme.spacing.xs) {
                 HStack(spacing: 10) {
                     Image(systemName: "person.circle.fill")
                         .font(.system(size: 18))
                         .foregroundColor(theme.colors.secondary.opacity(0.7))
                     Text(comment.displayName)
                         .font(theme.typography.subheadline)
-                        .foregroundColor(theme.colors.secondary.opacity(0.7))
+                        .foregroundColor(theme.colors.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
-                Spacer()
                 if let createdAt = comment.createdAt, let date = Date.formatFromISOString(createdAt) {
                     HStack(spacing: 8) {
                         Image(systemName: "clock")
@@ -324,7 +297,8 @@ extension SuggestionDetailView {
                             .foregroundColor(theme.colors.secondary.opacity(0.6))
                         Text(date)
                             .font(theme.typography.subheadline)
-                            .foregroundColor(theme.colors.secondary.opacity(0.6))
+                            .foregroundColor(theme.colors.secondary)
+                            .fixedSize(horizontal: false, vertical: true)
                     }
                 }
             }
@@ -333,10 +307,15 @@ extension SuggestionDetailView {
                 .foregroundColor(theme.colors.onSurface)
                 .multilineTextAlignment(.leading)
         }
+        .padding(theme.spacing.md)
         .background(
             RoundedRectangle(cornerRadius: theme.cornerRadius.lg)
                 .fill(theme.colors.surface)
-                .shadow(color: .black.opacity(0.15), radius: 4, x: 0, y: 2)
+                .shadow(color: .black.opacity(0.04), radius: 3, x: 0, y: 1)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: theme.cornerRadius.lg)
+                .stroke(theme.colors.secondary.opacity(0.1), lineWidth: 1)
         )
     }
 
@@ -349,8 +328,21 @@ extension SuggestionDetailView {
         )
         .overlay(
             RoundedRectangle(cornerRadius: theme.cornerRadius.lg, style: .continuous)
-                .stroke(theme.colors.secondary.opacity(0.25), lineWidth: 1)
+                .stroke(theme.colors.secondary.opacity(0.1), lineWidth: 1)
         )
+    }
+
+    var tvOSImageErrorView: some View {
+        VStack(spacing: theme.spacing.sm) {
+            Image(systemName: "photo")
+                .font(.system(size: 60))
+                .foregroundColor(theme.colors.secondary)
+            Text(TextManager.shared.texts.genericError)
+                .font(theme.typography.subheadline)
+                .foregroundColor(theme.colors.secondary)
+                .multilineTextAlignment(.center)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 #endif

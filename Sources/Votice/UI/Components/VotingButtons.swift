@@ -55,6 +55,8 @@ struct VotingButtons: View {
                         .foregroundColor(voteColor)
                         .fontWeight(hasVoted ? .semibold : .regular)
                 }
+                .frame(minWidth: 44, minHeight: 44)
+                .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
             .scaleEffect(isAnimating ? 0.95 : 1.0)

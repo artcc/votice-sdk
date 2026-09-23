@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://swift.org/"><img src="https://img.shields.io/badge/Swift-6-orange.svg" alt="Swift" /></a>
-  <a href="#"><img src="https://img.shields.io/badge/Platforms-iOS%2017%2B%20%7C%20iPadOS%2017%2B%20%7C%20macOS%2014%2B-lightgrey" alt="Platforms" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/Platforms-iOS%2017%2B%20%7C%20iPadOS%2017%2B%20%7C%20macOS%2014%2B%20%7C%20tvOS%2017%2B-lightgrey" alt="Platforms" /></a>
   <a href="https://swift.org/package-manager/"><img src="https://img.shields.io/badge/SPM-compatible-brightgreen" alt="SPM" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License" /></a>
 </p>
@@ -63,7 +63,7 @@ The Votice management app for handling suggestions or issues and apps is availab
 Add this line to your `Package.swift` dependencies:
 
 ```swift
-.package(url: "https://github.com/artcc/votice-sdk", from: "1.0.30"),
+.package(url: "https://github.com/artcc/votice-sdk", from: "1.1.0"),
 ```
 
 Or via Xcode:

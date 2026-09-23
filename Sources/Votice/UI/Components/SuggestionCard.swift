@@ -24,7 +24,7 @@ struct SuggestionCard: View {
     // MARK: - View
 
     var body: some View {
-        VStack(spacing: 5) {
+        VStack(spacing: theme.spacing.xs) {
             HStack {
                 Spacer()
                 StatusBadge(
@@ -45,20 +45,19 @@ struct SuggestionCard: View {
                         onVote: onVote
                     )
                     if ConfigurationManager.shared.commentIsEnabled, suggestion.commentCount ?? 0 > 0 {
-                        VStack(spacing: 4) {
+                        VStack(spacing: theme.spacing.xs) {
                             Image(systemName: "bubble.left.fill")
                                 .font(.subheadline)
-                                .foregroundColor(theme.colors.accent)
+                                .foregroundColor(theme.colors.secondary)
                             Text("\(suggestion.commentCount ?? 0)")
-                                .font(theme.typography.body)
-                                .foregroundColor(theme.colors.accent)
+                                .font(theme.typography.subheadline)
+                                .foregroundColor(theme.colors.secondary)
                         }
                     }
                 }
                 VStack(alignment: .leading, spacing: theme.spacing.sm) {
                     titleView
-                    authorView
-                    createdAtView
+                    metadataView
                 }
                 .padding(.trailing, theme.spacing.xs)
                 Image(systemName: "chevron.right")
@@ -73,25 +72,15 @@ struct SuggestionCard: View {
             RoundedRectangle(cornerRadius: theme.cornerRadius.lg)
                 .fill(theme.colors.surface)
                 .shadow(
-                    color: .black.opacity(isPressed ? 0.15 : 0.05),
-                    radius: isPressed ? 12 : 6,
+                    color: .black.opacity(isPressed ? 0.08 : 0.04),
+                    radius: isPressed ? 6 : 3,
                     x: 0,
-                    y: isPressed ? 6 : 3
+                    y: isPressed ? 3 : 1
                 )
         )
         .overlay(
             RoundedRectangle(cornerRadius: theme.cornerRadius.lg)
-                .stroke(
-                    LinearGradient(
-                        colors: [
-                            theme.colors.primary.opacity(isPressed ? 0.3 : 0.1),
-                            theme.colors.accent.opacity(isPressed ? 0.2 : 0.05)
-                        ],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    ),
-                    lineWidth: isPressed ? 1 : 0
-                )
+                .stroke(theme.colors.secondary.opacity(isPressed ? 0.2 : 0.1), lineWidth: 1)
         )
         .scaleEffect(isPressed ? 1.005 : 1.0)
         .onTapGesture {
@@ -111,8 +100,15 @@ struct SuggestionCard: View {
 // MARK: - Private
 
 private extension SuggestionCard {
+    var metadataView: some View {
+        VStack(alignment: .leading, spacing: theme.spacing.xs) {
+            authorView
+            createdAtView
+        }
+    }
+
     var titleView: some View {
-        VStack(spacing: theme.spacing.sm) {
+        VStack(spacing: theme.spacing.xs) {
             HStack(spacing: 5) {
                 if let issue = suggestion.issue, issue {
                     Image(systemName: "ladybug.fill")
@@ -142,7 +138,7 @@ private extension SuggestionCard {
 
     var authorView: some View {
         HStack {
-            HStack(spacing: 4) {
+            HStack(spacing: theme.spacing.xs) {
                 Image(systemName: suggestion.nickname != nil ? "person.circle.fill" : "person.circle")
                     .font(.subheadline)
                     .foregroundColor(theme.colors.secondary.opacity(0.7))
@@ -164,12 +160,14 @@ private extension SuggestionCard {
     var createdAtView: some View {
         if let createdAt = suggestion.createdAt, let date = Date.formatFromISOString(createdAt) {
             HStack {
-                Image(systemName: "clock")
-                    .font(.subheadline)
-                    .foregroundColor(theme.colors.secondary.opacity(0.7))
-                Text(date)
-                    .font(theme.typography.subheadline)
-                    .foregroundColor(theme.colors.secondary.opacity(0.7))
+                HStack(spacing: theme.spacing.xs) {
+                    Image(systemName: "clock")
+                        .font(.subheadline)
+                        .foregroundColor(theme.colors.secondary.opacity(0.7))
+                    Text(date)
+                        .font(theme.typography.subheadline)
+                        .foregroundColor(theme.colors.secondary.opacity(0.7))
+                }
                 Spacer()
             }
         }

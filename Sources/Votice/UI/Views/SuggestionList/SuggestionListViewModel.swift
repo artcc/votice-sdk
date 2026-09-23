@@ -51,6 +51,9 @@ final class SuggestionListViewModel: ObservableObject {
     var suggestionsIsEmpty: Bool {
         suggestions.isEmpty
     }
+    var isShowingFilteredResults: Bool {
+        selectedFilter != nil || (showCompletedSeparately && selectedTab != 0)
+    }
     var currentSuggestionsList: [SuggestionEntity] {
         if showCompletedSeparately {
             return selectedTab == 0 ? suggestions : completedSuggestions
@@ -208,6 +211,10 @@ extension SuggestionListViewModel {
             suggestions[filteredIndex] = suggestion
         }
 
+        if !showCompletedSeparately {
+            applyVisibilityFilter()
+        }
+
         Task {
             await loadVoteStatus(for: suggestion.id)
         }
@@ -252,7 +259,7 @@ private extension SuggestionListViewModel {
         let pagination = PaginationRequest(startAfter: nil, pageLimit: pageSize)
         let response = try await suggestionUseCase.fetchSuggestions(
             status: selectedFilter,
-            excludeCompleted: false,
+            excludeCompleted: selectedFilter == nil,
             pagination: pagination
         )
 
@@ -366,7 +373,7 @@ private extension SuggestionListViewModel {
             let pagination = PaginationRequest(startAfter: startAfter(for: singleFeed), pageLimit: pageSize)
             let response = try await suggestionUseCase.fetchSuggestions(
                 status: selectedFilter,
-                excludeCompleted: false,
+                excludeCompleted: selectedFilter == nil,
                 pagination: pagination
             )
 
@@ -528,7 +535,7 @@ private extension SuggestionListViewModel {
 
         // No filter selected: apply visibility based on configuration
         let visibleOptional = ConfigurationManager.shared.optionalVisibleStatuses
-        let mandatory: Set<SuggestionStatusEntity> = [.inProgress, .pending, .completed]
+        let mandatory: Set<SuggestionStatusEntity> = [.inProgress, .pending]
         let allowed: Set<SuggestionStatusEntity> = visibleOptional.union(mandatory)
 
         suggestions = singleFeed.filter { allowed.contains($0.status ?? .pending) }

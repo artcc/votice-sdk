@@ -214,8 +214,11 @@ private extension SuggestionListView {
     var standardContentView: some View {
         if viewModel.currentSuggestionsList.isEmpty && !viewModel.isLoading {
             EmptyStateView(
-                title: TextManager.shared.texts.noSuggestionsYet,
-                message: TextManager.shared.texts.beFirstToSuggest
+                title: viewModel.isShowingFilteredResults ?
+                    TextManager.shared.texts.noMatchingSuggestions : TextManager.shared.texts.noSuggestionsYet,
+                message: viewModel.isShowingFilteredResults ?
+                    TextManager.shared.texts.noMatchingSuggestionsMessage : TextManager.shared.texts.beFirstToSuggest,
+                showsCreationHint: !viewModel.isShowingFilteredResults
             )
         } else {
             suggestionsList

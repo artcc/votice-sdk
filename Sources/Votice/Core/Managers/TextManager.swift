@@ -31,6 +31,9 @@ public protocol VoticeTextsProtocol: Sendable {
     var loadingSuggestions: String { get }
     var noSuggestionsYet: String { get }
     var beFirstToSuggest: String { get }
+    var noMatchingSuggestions: String { get }
+    var noMatchingSuggestionsMessage: String { get }
+    var noSuggestionsMessage: String { get }
     var featureRequests: String { get }
     var all: String { get }
     var activeTab: String { get }
@@ -122,6 +125,9 @@ public struct DefaultVoticeTexts: VoticeTextsProtocol {
     public let loadingSuggestions = "Loading suggestions..."
     public let noSuggestionsYet = "No suggestions yet."
     public let beFirstToSuggest = "Be the first to suggest something!"
+    public let noMatchingSuggestions = "No matching suggestions"
+    public let noMatchingSuggestionsMessage = "There are no suggestions for the selected status."
+    public let noSuggestionsMessage = "Suggestions will appear here when available."
     public let featureRequests = "Feature Requests"
     public let all = "All"
     public let activeTab = "Active"

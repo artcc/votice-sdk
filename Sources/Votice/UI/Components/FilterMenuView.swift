@@ -77,6 +77,9 @@ struct FilterMenuView: View {
     // MARK: - View
 
     var body: some View {
+#if os(tvOS)
+        tvOSFilterButton
+#else
         if useLiquidGlass {
 #if os(iOS)
             liquidGlassFilterButton
@@ -86,6 +89,7 @@ struct FilterMenuView: View {
         } else {
             filterButton
         }
+#endif
     }
 }
 
@@ -93,6 +97,43 @@ struct FilterMenuView: View {
 
 private extension FilterMenuView {
     // MARK: - Properties
+
+#if os(tvOS)
+    var tvOSFilterButton: some View {
+        Button {
+            isExpanded = true
+        } label: {
+            Label(selectedFilter.map { title(for: $0) } ?? TextManager.shared.texts.all,
+                  systemImage: "line.3.horizontal.decrease.circle")
+        }
+        .sheet(isPresented: $isExpanded) {
+            ScrollView {
+                VStack(spacing: theme.spacing.lg) {
+                    tvOSFilterOption(title: TextManager.shared.texts.all, filter: nil)
+                    ForEach(orderedVisibleStatuses, id: \.self) { status in
+                        tvOSFilterOption(title: title(for: status), filter: status)
+                    }
+                }
+                .padding(theme.spacing.xxxl)
+            }
+        }
+    }
+
+    func tvOSFilterOption(title: String, filter: SuggestionStatusEntity?) -> some View {
+        Button {
+            isExpanded = false
+            onFilterSelected(filter)
+        } label: {
+            HStack {
+                Text(title)
+                Spacer()
+                if selectedFilter == filter {
+                    Image(systemName: "checkmark")
+                }
+            }
+        }
+    }
+#endif
 
     var liquidGlassFilterButton: some View {
         Menu {
@@ -116,6 +157,8 @@ private extension FilterMenuView {
                         .frame(width: 8, height: 8)
                 }
             }
+            .frame(minWidth: 44, minHeight: 44)
+            .contentShape(Rectangle())
         }
     }
 
@@ -141,12 +184,14 @@ private extension FilterMenuView {
                 RoundedRectangle(cornerRadius: theme.cornerRadius.sm)
                     .fill(theme.colors.primary.opacity(0.15))
             )
+            .frame(minWidth: 44, minHeight: 44)
+            .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
         .overlay(alignment: .topTrailing) {
             if isExpanded {
                 filterDropdown
-                    .offset(y: 40)
+                    .offset(y: 44)
                     .transition(.asymmetric(
                         insertion: .scale(scale: 0.95, anchor: .topTrailing).combined(with: .opacity),
                         removal: .scale(scale: 0.95, anchor: .topTrailing).combined(with: .opacity)
